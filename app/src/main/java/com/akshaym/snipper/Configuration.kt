@@ -4,32 +4,29 @@ import android.content.Context
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 
-class Configuration {
+class Configuration internal constructor(
+    context: Context,
+    list: List<Interceptor>,
+    monitor: Boolean,
+    allowTampering: Boolean
+) {
 
 
     private var clientBuilder: OkHttpClient.Builder = OkHttpClient.Builder()
 
 
-    private var isMonitoringAllowed = false
+    private var isMonitoringAllowed = monitor
 
-    private var isTamperingAllowed = false
+    private var isTamperingAllowed = allowTampering
 
     private lateinit var context: Context
 
 
-    private constructor(
-        context: Context,
-        list: List<Interceptor>,
-        monitor: Boolean,
-        allowTampering: Boolean
-    ) {
+    init {
         list.forEach {
             clientBuilder.addInterceptor(it)
         }
-        isMonitoringAllowed = monitor
-        isTamperingAllowed = allowTampering
         clientBuilder.build()
-
     }
 
 
